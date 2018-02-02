@@ -4,11 +4,9 @@ var inventoryId = [];
 var inventoryName = [];
 var inventoryPrice = [];
 var inventoryQuantityArr = [];
-var requestedQuantity = 0;
 var productIdNumber = 0;
 var productName = "";
 var stockQuantity = 0;
-var newStockQuantity = 0;
 var productPrice = 0;
 
 var connection = mysql.createConnection({
@@ -42,18 +40,19 @@ function queryItemName() {
     return;
 }
 
-function checkInventory() {
-	  
+function checkInventory(requestedQuantity) {
+	 
 	if (requestedQuantity > stockQuantity) {
 		console.log("Not enough inventory. We can special order it if you like");
 		return;
 	} else {
-		updateProduct();
+		updateProduct(requestedQuantity);
 	}
 	return;
 }
 
-function updateProduct() {
+function updateProduct(requestedQuantity) {
+	//var requestedQuantity = requestedQuantity;
 	var newStockQuantity = stockQuantity - requestedQuantity;
 	console.log("Gathering your order...\n" + productName + " \n" + "Quantity: " + requestedQuantity);
 	var query = connection.query(
@@ -67,14 +66,14 @@ function updateProduct() {
       		}
     	],
     function(err, res) {
-      	console.log("Order ready!\n" );
-     	customerTotal();
+      	console.log("Order ready!\n");
+     	customerTotal(requestedQuantity);
      	return;
 
     }
     
 )};
-function customerTotal() {
+function customerTotal(requestedQuantity) {
 	productPrice = productPrice * requestedQuantity;
 	console.log("Your total is: " + productPrice)
 	return;
@@ -98,8 +97,8 @@ function questions() {
 			//var stuff = answers[answers.item_id].product_name;
 		
 		
-		requestedQuantity = answers.productQuantity;
-   		checkInventory();
+		//requestedQuantity = answers.productQuantity;
+   		checkInventory(answers.productQuantity);
   	});
 return;
 }
