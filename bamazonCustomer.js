@@ -22,7 +22,7 @@ connection.connect(function(err) {
 	
 });
 
-
+// function to set the inventory up in the console
 function queryItemName() {
   // var query = connection.query("SELECT * FROM products WHERE item_id=?", [3], function(err, res) {
   	var query = connection.query("SELECT * FROM products",function(err, res) {
@@ -39,7 +39,7 @@ function queryItemName() {
     });
     return;
 }
-
+// function to check inventory levels for purchase
 function checkInventory(requestedQuantity) {
 	 
 	if (requestedQuantity > stockQuantity) {
@@ -50,7 +50,7 @@ function checkInventory(requestedQuantity) {
 	}
 	return;
 }
-
+// function to update the mysql db
 function updateProduct(requestedQuantity) {
 	//var requestedQuantity = requestedQuantity;
 	var newStockQuantity = stockQuantity - requestedQuantity;
@@ -73,11 +73,13 @@ function updateProduct(requestedQuantity) {
     }
     
 )};
+// adds the customer total
 function customerTotal(requestedQuantity) {
 	productPrice = productPrice * requestedQuantity;
 	console.log("Your total is: " + productPrice)
 	return startNewGame();
 }
+// after purchase, you get another chance to continue shopping
 function startNewGame() {
 	inquirer.prompt([
 		{
@@ -90,6 +92,7 @@ function startNewGame() {
 		}
 	});
 };
+// starts the shopping experience
 function questions() {
 	inquirer.prompt([
   		{
