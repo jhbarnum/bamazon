@@ -76,9 +76,20 @@ function updateProduct(requestedQuantity) {
 function customerTotal(requestedQuantity) {
 	productPrice = productPrice * requestedQuantity;
 	console.log("Your total is: " + productPrice)
-	return;
+	return startNewGame();
 }
-
+function startNewGame() {
+	inquirer.prompt([
+		{
+			name: 'continueShopping',
+			message: "Would you like to keep shopping? ( y or n )"
+		}
+	]).then(function (answer) {
+		if (answer.startNewGame == "y") {
+			questions();
+		}
+	});
+};
 function questions() {
 	inquirer.prompt([
   		{
