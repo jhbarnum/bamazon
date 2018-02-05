@@ -18,13 +18,10 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
 	if (err) throw err;
-	//console.log("connected as id " + connection.threadId);
-	
 });
 
 // function to set the inventory up in the console
 function queryItemName() {
-  // var query = connection.query("SELECT * FROM products WHERE item_id=?", [3], function(err, res) {
   	var query = connection.query("SELECT * FROM products",function(err, res) {
     for (var i = 0; i < res.length; i++) {
     	inventoryId.push(res[i].item_id);
@@ -33,12 +30,10 @@ function queryItemName() {
     	inventoryQuantityArr.push(res[i].stock_quantity);
       	console.log("Id: " + res[i].item_id + " | " + " name: " + res[i].product_name + " | " + " price: " + res[i].price );
     	}
-  
     	questions();
-
     });
-    return;
 }
+
 // function to check inventory levels for purchase
 function checkInventory(requestedQuantity) {
 	 
@@ -50,6 +45,7 @@ function checkInventory(requestedQuantity) {
 	}
 	return;
 }
+
 // function to update the mysql db
 function updateProduct(requestedQuantity) {
 	//var requestedQuantity = requestedQuantity;
@@ -69,16 +65,17 @@ function updateProduct(requestedQuantity) {
       	console.log("Order ready!\n");
      	customerTotal(requestedQuantity);
      	return;
-
-    }
-    
+    }   
 )};
+
 // adds the customer total
 function customerTotal(requestedQuantity) {
 	productPrice = productPrice * requestedQuantity;
 	console.log("Your total is: " + productPrice)
-	return startNewGame();
+	//return startNewGame();
+	process.exit();
 }
+
 // after purchase, you get another chance to continue shopping
 function startNewGame() {
 	inquirer.prompt([
@@ -88,10 +85,15 @@ function startNewGame() {
 		}
 	]).then(function (answer) {
 		if (answer.startNewGame == "y") {
+			console.log(answer.startNewGame)
 			questions();
-		}
+		} else {
+			return;
+		};
+
 	});
 };
+
 // starts the shopping experience
 function questions() {
 	inquirer.prompt([
@@ -115,8 +117,7 @@ function questions() {
    		checkInventory(answers.productQuantity);
   	});
 return;
-}
-
+};
 
 queryItemName();  	
 
